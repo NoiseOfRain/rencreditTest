@@ -1,0 +1,6 @@
+.allure
+.idea
+build
+allure-report
+allure-results
+target
