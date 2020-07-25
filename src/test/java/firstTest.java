@@ -16,6 +16,7 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static rencredit.BaseTest.baseTest;
 
+@Feature("Получение ПДФ с условиями по вкладу")
 public class firstTest {
 
     @BeforeClass
@@ -32,7 +33,6 @@ public class firstTest {
     }
 
     @Test
-    @Feature("Получение ПДФ с условиями по вкладу")
     public void logic() throws IOException {
         open("http://rencredit.ru");
         baseTest.mainPage().contributions.click();

@@ -27,7 +27,7 @@ public class secondTest {
     }
 
 
-    @Test(testName = "Ololo")
+    @Test
     public void logic() {
         open("http://rencredit.ru");
         baseTest.mainPage().cards.click();
