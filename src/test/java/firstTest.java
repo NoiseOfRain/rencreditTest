@@ -1,8 +1,10 @@
 import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import rencredit.AllureSelenideCustom;
 
@@ -10,18 +12,27 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
 import static rencredit.BaseTest.baseTest;
 
 public class firstTest {
 
-    @BeforeTest
+    @BeforeClass
     void setUp() {
         SelenideLogger.addListener("AllureSelenide", new AllureSelenideCustom()
+                .screenshots(false)
         );
     }
 
+    @AfterClass
+    void tearDown() {
+        closeWebDriver();
+        SelenideLogger.removeListener("AllureSelenide");
+    }
+
     @Test
+    @Feature("Получение ПДФ с условиями по вкладу")
     public void logic() throws IOException {
         open("http://rencredit.ru");
         baseTest.mainPage().contributions.click();

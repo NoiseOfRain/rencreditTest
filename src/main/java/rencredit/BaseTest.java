@@ -1,7 +1,9 @@
 package rencredit;
 
-import rencredit.pages.ContributionsPage;
 import rencredit.pages.MainPage;
+import rencredit.pages.products.CardsPage;
+import rencredit.pages.products.ContributionsPage;
+import rencredit.pages.products.cards.DebetCardPage;
 
 public class BaseTest {
 
@@ -15,5 +17,12 @@ public class BaseTest {
         return new ContributionsPage();
     }
 
+    public CardsPage cardsPage() {
+        return new CardsPage();
+    }
+
+    public DebetCardPage debetCardPage() {
+        return new DebetCardPage();
+    }
 
 }

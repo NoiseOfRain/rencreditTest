@@ -1,15 +1,43 @@
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.Feature;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import rencredit.AllureSelenideCustom;
 
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static rencredit.BaseTest.baseTest;
+import static rencredit.pages.products.cards.DebetCardPage.Regions.samara;
 
+@Feature("Заказ дебетовой карты")
 public class secondTest {
 
-    @Test
+    @BeforeClass
+    void setUp() {
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenideCustom()
+                .screenshots(true)
+        );
+    }
+
+    @AfterClass
+    void tearDown() {
+        closeWebDriver();
+        SelenideLogger.removeListener("AllureSelenide");
+    }
+
+
+    @Test(testName = "Ololo")
     public void logic() {
-        System.out.println("ololo");
-//        open("https://rencredit.ru/");
-//        $("a[href=\"/contributions/\"]").click();
+        open("http://rencredit.ru");
+        baseTest.mainPage().cards.click();
+        baseTest.cardsPage().linkFillRequestForCard.click();
+        baseTest.debetCardPage().inputClientLastName.setValue("Cтар");
+        baseTest.debetCardPage().inputClientName.setValue("Вит");
+        baseTest.debetCardPage().inputClientMobilePhone.setValue("9093652211");
+        baseTest.debetCardPage().inputEmail.setValue("star@gmail.com");
+        baseTest.debetCardPage().checkboxNoSecondName.click();
+        baseTest.debetCardPage().selectRegionForGettingCard(samara);
     }
 
 }

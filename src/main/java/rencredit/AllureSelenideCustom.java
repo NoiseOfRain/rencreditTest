@@ -111,11 +111,10 @@ public class AllureSelenideCustom implements LogEventListener {
                     .setStatus(Status.PASSED));
 
             lifecycle.updateStep(stepResult -> stepResult.setStart(stepResult.getStart() - event.getDuration()));
-
+            if (saveScreenshots) {
+                lifecycle.addAttachment("Screenshot", "image/png", "png", getScreenshotBytes());
+            }
             if (LogEvent.EventStatus.FAIL.equals(event.getStatus())) {
-                if (saveScreenshots) {
-                    lifecycle.addAttachment("Screenshot", "image/png", "png", getScreenshotBytes());
-                }
                 if (savePageHtml) {
                     lifecycle.addAttachment("Page source", "text/html", "html", getPageSourceBytes());
                 }
@@ -149,6 +148,10 @@ public class AllureSelenideCustom implements LogEventListener {
                 "Открываем страницу \"${url}\""
         ));
         formatters.add(new EventFormatter(
+                Pattern.compile("\\$\\(\"(?<list>.*)\\.findBy\\(text '(?<element>.*)'\\)\"\\) click\\(\\)"),
+                "Кликаем на элемент \"${element}\" из списка \"${list}\""
+        ));
+        formatters.add(new EventFormatter(
                 Pattern.compile("\\$\\((?<element>.*)\\) click\\(\\)"),
                 "Кликаем на элемент ${element}"
         ));
@@ -156,7 +159,6 @@ public class AllureSelenideCustom implements LogEventListener {
                 Pattern.compile("\\$\\((?<element>.*)\\) set value\\((?<value>.*)\\)"),
                 "Вводим в элемент ${element} значение [${value}]"
         ));
-
         formatters.add(new EventFormatter(
                 Pattern.compile("(?<element>.*)"),
                 "Действие не найдено: ${element}"

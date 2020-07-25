@@ -1,4 +1,4 @@
-package rencredit.pages;
+package rencredit.pages.products;
 
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
