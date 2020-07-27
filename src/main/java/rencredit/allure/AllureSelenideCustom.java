@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package rencredit;
+package rencredit.allure;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
@@ -148,6 +148,10 @@ public class AllureSelenideCustom implements LogEventListener {
                 "Открываем страницу \"${url}\""
         ));
         formatters.add(new EventFormatter(
+                Pattern.compile("\\$\\(\"(?<list>.*)\\.findBy\\(text \"(?<element>.*)\"\\)\"\\) click\\(\\)"),
+                "Кликаем на элемент \"${element}\" из списка \"${list}\""
+        ));
+        formatters.add(new EventFormatter(
                 Pattern.compile("\\$\\(\"(?<list>.*)\\.findBy\\(text '(?<element>.*)'\\)\"\\) click\\(\\)"),
                 "Кликаем на элемент \"${element}\" из списка \"${list}\""
         ));
@@ -158,6 +162,10 @@ public class AllureSelenideCustom implements LogEventListener {
         formatters.add(new EventFormatter(
                 Pattern.compile("\\$\\((?<element>.*)\\) set value\\((?<value>.*)\\)"),
                 "Вводим в элемент ${element} значение [${value}]"
+        ));
+        formatters.add(new EventFormatter(
+                Pattern.compile("\\$\\((?<element>.*)\\) should be\\((?<condition>.*)\\)"),
+                "Проверяем, что элемент ${element} должен быть \"${condition}\""
         ));
         formatters.add(new EventFormatter(
                 Pattern.compile("(?<element>.*)"),

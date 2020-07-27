@@ -10,14 +10,16 @@ import org.openqa.selenium.interactions.Actions;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.openqa.selenium.By.cssSelector;
-import static rencredit.NamedBy.css;
-import static rencredit.NamedBy.xpath;
+import static rencredit.allure.NamedBy.css;
+import static rencredit.allure.NamedBy.xpath;
 
 public class ContributionsPage {
 
     //    public SelenideElement checkBoxInBank = $(css("[name=\"deposit_b_n\"]").as("Чек бокс 'В отделении банка")).parent();
-    public SelenideElement checkBoxInBank = $(xpath("//div[./input[@name=\"deposit_b_n\"]]").as("Чек бокс 'В отделении банка'"));
-    public SelenideElement inputAmount = $(css("[name=\"amount\"]").as("Поле ввода 'Сумма вклада'"));
+    public SelenideElement checkBoxInBank = $(xpath("//div[./input[@name=\"deposit_b_n\"]]").as("Чек бокс \"В отделении банка\""));
+    public SelenideElement inputAmount = $(css("[name=\"amount\"]").as("Поле ввода \"Сумма вклада\""));
+
+    public SelenideElement linkGeneralConditionsPDF = $(xpath("//a[.='Общие условия по вкладам']").as("Ссылка \"Общие условия по вкладам\""));
 
     private By slider = cssSelector("[data-property=\"period\"] .ui-slider-horizontal");//слайдер
     private By sliderHandler = cssSelector("[data-property=\"period\"] .ui-slider-handle");//бегунок слайдера

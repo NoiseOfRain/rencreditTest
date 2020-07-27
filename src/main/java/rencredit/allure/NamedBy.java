@@ -1,4 +1,4 @@
-package rencredit;
+package rencredit.allure;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;

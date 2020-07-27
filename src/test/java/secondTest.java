@@ -1,9 +1,11 @@
+import com.codeborne.selenide.AssertionMode;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.Feature;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import rencredit.AllureSelenideCustom;
+import rencredit.allure.AllureSelenideCustom;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
@@ -18,6 +20,8 @@ public class secondTest {
         SelenideLogger.addListener("AllureSelenide", new AllureSelenideCustom()
                 .screenshots(true)
         );
+        Configuration.assertionMode = AssertionMode.STRICT;
+        Configuration.startMaximized = true;
     }
 
     @AfterClass
@@ -25,7 +29,6 @@ public class secondTest {
         closeWebDriver();
         SelenideLogger.removeListener("AllureSelenide");
     }
-
 
     @Test
     public void logic() {
