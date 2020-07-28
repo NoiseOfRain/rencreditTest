@@ -8,17 +8,17 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import io.qameta.allure.model.StepResult;
 import org.apache.commons.io.FileUtils;
-import org.mozilla.universalchardet.UniversalDetector;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 import rencredit.allure.AllureSelenideCustom;
 import rencredit.db.Driver;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -31,7 +31,7 @@ import static rencredit.BaseTest.baseTest;
 @Listeners({SoftAsserts.class})
 public class firstTest {
 
-    String fileForSaveIntoDB = "target\\test.csv";
+    StringBuilder steps = new StringBuilder();
 
     @BeforeClass
     void setUp() {
@@ -52,22 +52,16 @@ public class firstTest {
         baseTest.contributionsPage().moveSliderHandlerLeft();
         baseTest.contributionsPage().linkGeneralConditionsPDF.shouldBe(Condition.visible);
         downloadPdf();
-        saveResultsToFile();
+        saveResults();
     }
 
-    private void saveResultsToFile() {
+    private void saveResults() {
         Allure.getLifecycle().updateTestCase(test -> {
             for (StepResult step : test.getSteps()) {
-                try {
-                    FileWriter writer = new FileWriter(fileForSaveIntoDB,true);
-                    writer.append(format("INSERT INTO RENES (STEP_START, STEP_END, STEP_NAME) VALUES ('%s', '%s', '%s');\n",
-                            UnixTimeToDateTime(step.getStart()),
-                            UnixTimeToDateTime(step.getStop()),
-                            step.getName()));
-                    writer.close();
-                } catch (IOException e) {
-                    System.out.println("Не удалось вписать данные в файл");
-                }
+                steps.append(format("INSERT INTO RENES (STEP_START, STEP_END, STEP_NAME) VALUES ('%s', '%s', '%s');\n",
+                        UnixTimeToDateTime(step.getStart()),
+                        UnixTimeToDateTime(step.getStop()),
+                        step.getName()));
             }
         });
     }
@@ -80,11 +74,8 @@ public class firstTest {
     }
 
     @AfterClass
-    void tearDown() throws IOException {
-        for (String line : Files.readAllLines(Paths.get(fileForSaveIntoDB), Charset.forName(getFileCoding(fileForSaveIntoDB)))) {
-            Driver.updateData(line);
-        }
-        new File(fileForSaveIntoDB).delete();
+    void tearDown() {
+        Driver.updateData(steps.toString());
 
         closeWebDriver();
         SelenideLogger.removeListener("AllureSelenide");
@@ -94,25 +85,6 @@ public class firstTest {
         Date date = new Date(time);
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss:SSS");
         return format.format(date);
-    }
-
-    /**
-     * Получение кодировки файла
-     */
-    public static String getFileCoding(String file) throws IOException {
-        //узнаем кодировку файла
-        String encoding;
-        UniversalDetector detector = new UniversalDetector(null);
-        byte[] buf = new byte[4096];
-        int nread;
-        InputStream is = new FileInputStream(file);
-        while ((nread = is.read(buf)) > 0 && !detector.isDone()) {
-            detector.handleData(buf, 0, nread);
-        }
-        detector.dataEnd();
-        is.close();
-        encoding = detector.getDetectedCharset();
-        return encoding;
     }
 
 }
